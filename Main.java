@@ -1,50 +1,137 @@
-import java.util.Scanner;
-class Book{
-    String name,author;
-    int price,num_pages;
-    Book(String name,String author,int price,int num_pages){
-        this.name=name;
-        this.author=author;
-        this.price=price;
-        this.num_pages=num_pages;
-    }
-    public String toPrintString(){
-        String name,author,price,num_of_pages;
-        name="name:"+this.name+"\n";
-        author="author:"+this.author+"\n";
-        price="price:"+this.price+"\n";
-        num_of_pages="no of pages:"+this.num_pages+"\n";
-        return name+author+price+num_of_pages;
-    }
+import java.util.*;
+import java.util.*;
+
+class Account{
+String name;
+int accno;
+String type;
+double balance;
+Account(String name,int accno,String type,double balance){
+this.name = name;
+this.accno = accno;
+this.type = type;
+this.balance = balance;
 }
 
-class Main{
-    public static void main(String args[]){
-        Scanner s=new Scanner(System.in);
-        String name,author;
-        int price,num_pages;
-        int num;
-        System.out.println("enter the no of books:\n");
-        num=s.nextInt();
-        Book b[];
-        b=new Book[num];
-        for(int i=0;i<num;i++){
-            System.out.println("enter the name of book:\n");
-            name=s.next();
-            System.out.println("enter the author of book:\n");
-            author=s.next();
-            System.out.println("enter the price of book:\n");
-            price=s.nextInt();
-            System.out.println("enter the no of pages of book:\n");
-            num_pages=s.nextInt();
-            b[i]=new Book(name,author,price,num_pages);
+void deposit(double amount){
+balance +=amount;
+}
+void withdraw(double amount){
+if((balance-amount)>=0){
+balance -=amount;
+}
+else{
+System.out.println("Insufficient balance");
+}
+}
+void display(){
+System.out.println("Name : "+name+"\n"+
+  "AccountNo : "+accno+"\n"+
+  "Type : "+type+"\n"+
+  "balance: "+balance+"\n");
+}
+}
 
-        }
+class SavingAccount extends Account{
+private static int rate = 5;
+SavingAccount(String name,int accno,String type,double balance){
+super(name,accno,type,balance);
+}
+void balanceWithInterest(){
+balance +=balance*rate/100;
+System.out.println("balance: "+balance);
+}
 
-        for(int i=0;i<num;i++){
-               System.out.println(b[i].toPrintString());
-        }
-       System.out.println("name:Sohan T Sanjeev \n");
-       System.out.println("usn:2023BMS02532 \n");
+}
+
+class CurrentAccount extends Account{
+    private static int rate = 5;
+    CurrentAccount(String name,int accno,String type,double balance){
+    super(name,accno,type,balance);
     }
+    void balanceWithInterest(){
+    balance +=balance*rate/100;
+    System.out.println("balance: "+balance);
+    }
+    
+    }
+
+public class Main{
+public static void main(String args[]){
+Scanner s = new Scanner(System.in);
+System.out.println("Enter your name: ");
+String name = s.nextLine();
+
+System.out.println("Enter the account type (current or savings)");
+String type = s.next();
+
+System.out.println("Enter the account number: ");
+int accno = s.nextInt();
+
+System.out.println("Enter the initial balance: ");
+double balance = s.nextDouble();
+
+Account acc = new Account(name,accno,type,balance);
+SavingAccount sa =  new SavingAccount(name,accno,type,balance);
+CurrentAccount cc=  new CurrentAccount(name,accno,type,balance);
+double amount;
+while(true){
+if(acc.type.equals("savings")){
+System.out.println("\n-------MENU------\n");
+System.out.println("1. Deposit \n2.Withdraw \n 3.compute interest for SavingsAccount \n 4.Display Account Details\n 5.Exit\n");
+
+System.out.println("Enter your choice");
+int choice = s.nextInt();
+
+
+switch(choice){
+case 1:System.out.println("Enter the deposit amount");
+amount = s.nextDouble();
+sa.deposit(amount);
+break;
+case 2: System.out.println("Enter the withdrawl amount ");
+amount = s.nextDouble();
+sa.withdraw(amount);
+break;
+case 3:sa.balanceWithInterest();
+break;
+case 4:System.out.println("Details: ");
+sa.display();
+break;
+case 5: return;
+default: System.out.println("Invalid choice ");
+}
+
+}
+
+else if(acc.type.equals("current")){
+    System.out.println("\n-------MENU------\n");
+    System.out.println("1. Deposit \n2.Withdraw \n 3.compute interest for SavingsAccount \n 4.Display Account Details\n 5.Exit\n");
+    
+    System.out.println("Enter your choice");
+    int choice = s.nextInt();
+    
+    
+    switch(choice){
+    case 1:System.out.println("Enter the deposit amount");
+    amount = s.nextDouble();
+    cc.deposit(amount);
+    break;
+    case 2: System.out.println("Enter the withdrawl amount ");
+    amount = s.nextDouble();
+    cc.withdraw(amount);
+    break;
+    case 3:cc.balanceWithInterest();
+    break;
+    case 4:System.out.println("Details: ");
+    cc.display();
+    break;
+    case 5: return;
+    default: System.out.println("Invalid choice ");
+    }
+    
+    System.out.println("name:sohan t sanjeev usn:2023bms02532");
+}
+}
+}
 }
